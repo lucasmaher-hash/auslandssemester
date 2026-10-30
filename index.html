@@ -54,6 +54,14 @@ section { display:grid; gap:12px; align-content:start; } section>h2 { font-size:
 .card { background:var(--surface); border-radius:12px; overflow-x:auto; }
 table { border-collapse:collapse; width:100%; font-size:15px; } th,td { text-align:left; padding:10px 14px; vertical-align:top; }
 th { font-size:13px; color:var(--muted); font-weight:500; } tr+tr td { box-shadow:inset 0 .5px 0 var(--line); }
+.ptoggle { display:flex; gap:6px; } .ptoggle button { font:inherit; font-size:14px; border:0; background:var(--fill); color:var(--fg); padding:5px 12px; border-radius:999px; cursor:pointer; }
+.ptoggle button[aria-pressed="true"] { background:var(--fg); color:var(--bg); }
+.proc { list-style:none; margin:0; padding:0; border-radius:12px; background:var(--surface); overflow:hidden; counter-reset:s; }
+.proc li { display:grid; grid-template-columns:28px 1fr auto; gap:12px; padding:12px 16px; align-items:start; counter-increment:s; }
+.proc li+li { box-shadow:inset 0 .5px 0 var(--line); }
+.proc li::before { content:counter(s); font-size:13px; font-weight:600; color:var(--muted); background:var(--fill); width:24px; height:24px; border-radius:50%; display:grid; place-items:center; }
+.proc p { font-size:15px; color:var(--muted); }
+.pblock[hidden] { display:none; } .pblock { display:grid; gap:12px; }
 .legend { font-size:14px; color:var(--muted); }
 .filters { display:flex; gap:6px; } .filters button { font:inherit; font-size:14px; border:0; background:var(--fill); color:var(--fg); padding:5px 12px; border-radius:999px; cursor:pointer; }
 .filters button.alt { background:transparent; box-shadow:inset 0 0 0 1px var(--line); }
@@ -77,7 +85,7 @@ summary.more { cursor:pointer; font-weight:600; padding:12px 14px; }
 @media (max-width:760px) {
   .cols { display:none; } .opt summary { grid-template-columns:26px minmax(0,1fr) 36px; } .opt summary .st { display:none; }
   .mini { display:grid; grid-template-columns:repeat(2,1fr); gap:6px; } .mini div { display:grid; gap:2px; font-size:13px; }
-  .panel { padding-left:14px; } .todos li { grid-template-columns:22px 1fr; } .todos .pill { grid-column:2; justify-self:start; }
+  .panel { padding-left:14px; } .todos li { grid-template-columns:22px 1fr; } .todos .pill { grid-column:2; justify-self:start; } .proc li { grid-template-columns:28px 1fr; } .proc .pill { grid-column:2; justify-self:start; }
 }
 </style>
 </head>
@@ -89,7 +97,7 @@ summary.more { cursor:pointer; font-weight:600; padding:12px 14px; }
 <p>16 bewertete Optionen (16 mit HM-Weg): zuerst außerhalb Europas, Europa als Plan B. Nächste Schritte und Fristen. HM-Seiten geprüft am 29.10.2026. Kein Platz ist bestätigt.</p>
 </header>
 <nav class="tabbar"><ul>
-<li><a href="#start">Start</a></li><li><a href="#ranking">Ranking</a></li><li><a href="#offen">Offen &amp; raus</a></li><li><a href="#quellen">Quellen</a></li>
+<li><a href="#start">Start</a></li><li><a href="#prozess">Prozess</a></li><li><a href="#ranking">Ranking</a></li><li><a href="#offen">Offen &amp; raus</a></li><li><a href="#quellen">Quellen</a></li>
 </ul></nav>
 <main class="wrap">
 
@@ -107,6 +115,24 @@ summary.more { cursor:pointer; font-weight:600; padding:12px 14px; }
 <h2>Fristen</h2>
 <div class="card"><table><thead><tr><th>Semester</th><th>Non-EU</th><th>Erasmus+ / Schweiz</th><th>Status</th></tr></thead><tbody><tr><td><strong>SoSe 2027 (4. Sem.)</strong></td><td class="mono">01.05.–01.07.2026</td><td class="mono">01.08.2026</td><td><span class="pill p-bad">verstrichen</span><br><span class="muted">Nur Restplätze bei Prof. Barr erfragen.</span></td></tr><tr><td><strong>WS 2027/28 (5. Sem.)</strong></td><td class="mono">01.10.–01.12.2026</td><td class="mono">01.04.2027 (Chambéry, Bern: 15.03.)</td><td><span class="pill p-warn">Non-EU jetzt offen</span><br><span class="muted">Non-EU-Fenster läuft noch rund 4 Wochen.</span></td></tr><tr><td><strong>SoSe 2028 (6. Sem.)</strong></td><td class="mono">01.05.–01.07.2027</td><td class="mono">01.08.2027 (Nominierung durch Barr vorher)</td><td><span class="pill p-info">kommend</span><br><span class="muted"></span></td></tr><tr><td><strong>WS 2028/29 (7. Sem.)</strong></td><td class="mono">01.10.–01.12.2027</td><td class="mono">01.04.2028</td><td><span class="pill p-info">später</span><br><span class="muted"></span></td></tr></tbody></table></div>
 <p class="legend">Fristen und Abläufe auf den HM-Seiten geprüft am 29.10.2026; die Jahreszahlen sind aus den wiederkehrenden Terminen abgeleitet, nicht als 2027/28-Fristen bestätigt. Non-EU: Auswahl erst nach Fristende, meist mit Auswahlgespräch; frühes Einreichen hilft nicht. Interne FK12-Frist ist nirgends veröffentlicht: bei Prof. Barr erfragen.</p>
+</section>
+
+<section class="tab" id="prozess">
+<div class="ptoggle" role="group" aria-label="Weg"><button aria-pressed="true" data-p="eu">EU / Erasmus+</button><button aria-pressed="false" data-p="noneu">International (Non-EU)</button></div>
+<div class="pblock" id="p-eu">
+<h2>Ablauf Erasmus+ und Schweiz</h2>
+<p class="legend">Stand der HM-Seite „Bewerbungsablauf und -unterlagen“, geprüft am 30.10.2026. Zwei Fristen pro Zeile: Wintersemester / Sommersemester.</p>
+<ol class="proc"><li><div><strong>Voraussetzungen prüfen</strong><p>Austausch ab dem 3. Semester möglich (mindestens 2 Bachelor-Semester absolviert). Aufenthalt mindestens 2 Monate, Förderung insgesamt bis 12 Monate pro Studienzyklus. Nur Partnerhochschulen der HM-Liste zählen, am besten die der eigenen Fakultät.</p></div><span class="pill p-info">jetzt</span></li><li><div><strong>Partner wählen, Partnerfristen prüfen</strong><p>Sprache des Unterrichts und eigene Bewerbungsfrist der Partneruni auf deren Incoming-Seite prüfen. Früher als HM: Chambéry und HKB Bern für das Wintersemester 15.03.</p></div><span class="pill p-info">jetzt</span></li><li><div><strong>Erasmus-Infoveranstaltung</strong><p>04.02.2027, 17:00 Uhr (HM-Terminseite). Danach Gespräch mit Prof. Sue Barr, der Auslandsbeauftragten der FK12: Wunschuni, freie Plätze, geplante Kurse, interne Frist und Portfolio.</p></div><span class="pill p-info">04.02.2027</span></li><li><div><strong>Anlage A im HM-Erasmus-Portal</strong><p>Bewerbungsformular online, Login mit HM-Account. Unterschrift nur von dir. Die Auswahl macht Prof. Barr durch den Eintrag in die Nominierungsliste. Kriterien: selbständiges Handeln, fristgerechte und vollständige Unterlagen, Studienleistungen, Sprachkenntnisse, Motivation, Engagement.</p></div><span class="pill p-info">bis 01.04. / 01.08.</span></li><li><div><strong>Anlage C: Motivationsschreiben mit Kurswahl</strong><p>Motivation und geplante Kurse an der Partneruni, nur von dir unterschrieben, per Mail an international-office@hm.edu. Der Kursplan wird später im Learning Agreement festgezurrt.</p></div><span class="pill p-info">bis 01.04. / 01.08.</span></li><li><div><strong>Sprachnachweis, falls verlangt</strong><p>Manche Partner verlangen einen Nachweis (auf deren Seite prüfen). In den meisten Fällen reicht der OLS-Test, den du im Prozess machst.</p></div><span class="pill p-info">für die Partner-Bewerbung</span></li><li><div><strong>Nominierung durch die HM</strong><p>Das International Office bearbeitet die Bewerbungen und nominiert dich an der Partneruni.</p></div><span class="pill p-info">Anfang April / Oktober</span></li><li><div><strong>Pflichtveranstaltung für Nominierte</strong><p>Verpflichtend. Dort gibt es den Einschreibeschlüssel für den Moodle-Kurs Erasmus+ Outgoing mit allen Unterlagen vor, während und nach dem Semester.</p></div><span class="pill p-info">Mitte April / Oktober</span></li><li><div><strong>Bewerbung an der Partneruni</strong><p>Die Partneruni schreibt dich per Mail an. Unterlagen selbständig und fristgerecht einreichen, zum Beispiel Sprachnachweis und Transcript of Records aus PRIMUSS.</p></div><span class="pill p-info">nach Partnerfrist</span></li><li><div><strong>Learning Agreement</strong><p>Online im Erasmus+-Portal. Die Kursliste und die Anerkennung laufen über Prof. Barr; die Anerkennung genehmigt der Vorsitz der Prüfungskommission.</p></div><span class="pill p-info">nach Nominierung</span></li><li><div><strong>Letter of Acceptance</strong><p>Annahmebescheid der Partneruni; Reise und Wohnung erst danach fest buchen (Empfehlung).</p></div><span class="pill p-info">von der Partneruni</span></li><li><div><strong>Grant Agreement und Learning Agreement abschließen</strong><p>Grant Agreement (D.1) samt Zusatzanlagen einreichen und das Learning Agreement im Portal finalisieren.</p></div><span class="pill p-info">bis 01.08. / 01.12.</span></li></ol>
+<div class="note"><strong>Schweiz</strong><p>Schweiz (FHNW, ECAL, HKB) läuft anders: Anlage A original unterschrieben per Mail, Anlage B/E (Learning Agreement als PDF) vorläufig bis 01.04. / 01.08., vollständig unterschrieben bis 01.08. / 01.01., dazu Anlage C.</p></div>
+<h2>Deine Semester und Fristen</h2>
+<div class="card"><table><thead><tr><th>Semester</th><th>Aufenthalt</th><th>Anlage A + C</th><th>Nominierung / Pflicht-Info</th><th>Grant Agreement</th><th></th></tr></thead><tbody><tr><td><strong>4. Sem. · SoSe 2027</strong></td><td>ca. März–Juli 2027</td><td class="mono">01.08.2026</td><td class="mono"></td><td class="mono"></td><td><span class="pill p-bad">verstrichen</span></td></tr><tr><td><strong>5. Sem. · WS 2027/28</strong></td><td>ca. Oktober 2027–Februar 2028</td><td class="mono">01.04.2027</td><td class="mono">Anfang April / Mitte April 2027</td><td class="mono">01.08.2027</td><td><span class="pill p-warn">nächste Chance</span></td></tr><tr><td><strong>6. Sem. · SoSe 2028</strong></td><td>ca. März–Juli 2028</td><td class="mono">01.08.2027</td><td class="mono">Anfang / Mitte Oktober 2027</td><td class="mono">01.12.2027</td><td><span class="pill p-info">kommend</span></td></tr><tr><td><strong>7. Sem. · WS 2028/29</strong></td><td>ca. Oktober 2028–Februar 2029</td><td class="mono">01.04.2028</td><td class="mono">Anfang / Mitte April 2028</td><td class="mono">01.08.2028</td><td><span class="pill p-info">später</span></td></tr></tbody></table></div>
+<p class="legend">Wintersemester im Ausland = Fristen 01.04. / 01.08.; Sommersemester = 01.08. / 01.12. Jahreszahlen aus den wiederkehrenden HM-Terminen abgeleitet, für 2027/28 nicht bestätigt. Aufenthaltsmonate sind grobe HM-Semesterzeiten; die Partneruni hat eigene Semestertermine. Die interne FK12-Auswahlfrist von Prof. Barr ist nirgends veröffentlicht: erfragen.</p>
+<p class="legend"><a href="https://hm.edu/internationales/wege_in_die_welt/studierende/eu/eu_ablauf_und_unterlagen.de.html">Quelle: HM Erasmus, Ablauf und Unterlagen</a></p>
+</div>
+<div class="pblock" id="p-noneu" hidden>
+<h2>Ablauf International (Non-EU)</h2>
+<p class="muted">Noch nicht ausgearbeitet. Die Schritte stehen bis dahin unter Start (Nächste Schritte).</p>
+</div>
 </section>
 
 <section class="tab" id="ranking">
@@ -230,6 +256,8 @@ function applyFilter(){var n=0;var alt=document.querySelector(".filters .alt");i
 document.querySelectorAll(".filters button").forEach(function(b){b.addEventListener("click",function(){
 if(b.dataset.all){showAll=!showAll;b.setAttribute("aria-pressed",showAll)}else{reg=b.dataset.f;document.querySelectorAll(".filters button[data-f]").forEach(function(x){x.setAttribute("aria-pressed",x===b)})}
 applyFilter()})});
+var pb=document.querySelectorAll(".ptoggle button");
+pb.forEach(function(b){b.addEventListener("click",function(){pb.forEach(function(x){x.setAttribute("aria-pressed",x===b)});document.querySelectorAll(".pblock").forEach(function(p){p.hidden=(p.id!=="p-"+b.dataset.p)})})});
 applyFilter();
 </script>
 
